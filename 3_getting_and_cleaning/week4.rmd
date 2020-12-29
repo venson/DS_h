@@ -54,4 +54,23 @@ change _ in rewiews into blank. but just the first _ will be replaced.
 gsub will replace all the _.
 `gsub("_", "", "this_is_a_test")`
 
+### grep(), grepl()
+
+```{r}
+grep("Alameda", cameraData$intersection)
+grep("Alameda", cameraData$intersection, value = TRUE)
+
+grepl("Alameda", cameraData$intersection)
+```
+
+### more useful string function
+
+```{r}
+library(stringr)
+nchar("jeffrey leek")           # count the characters
+substr("Jeffrey leek", 1, 7)    # find the 1-7 letters
+paste("Jeffrey", "leek")        # paste strings together with a space
+paste0("jeffrey", "leek")       # paste strings together
+str_trim("jef     ")            # remove white space
+```
 
