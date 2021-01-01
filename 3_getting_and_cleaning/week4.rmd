@@ -22,13 +22,15 @@ tolower(names(cameraData))
 - good for automatically spliting variable names
 - important parameters:x split
 ```{r}
-splitNames <- strsplit(names(cameraData),"\\.")
+splitNames <- strsplit(names(cameraData), "\\.")
 splitNames[[5]]  # no change
 splitNames[[6]]
 ```
 ### quick aside- lists
 ```{r}
-mylist <- list(letters = c("A", "b", "c"), numbers = 1:3, matrix(1:25, ncol = 5))
+mylist <- list(letters = c("A", "b", "c"),
+               numbers = 1:3,
+               matrix(1:25, ncol = 5))
 head(mylist)
 ```
 ```{r}
@@ -45,7 +47,7 @@ mylist[[1]]
 ### sapply()
 ```{r}
 spiltNames[[6]][1]
-firstElement <- function(x){x[1]}
+firstElement <- function(x) {x[1]}
 sapply(splitNames, firstElement)
 ```
 ### sub()
@@ -73,4 +75,85 @@ paste("Jeffrey", "leek")        # paste strings together with a space
 paste0("jeffrey", "leek")       # paste strings together
 str_trim("jef     ")            # remove white space
 ```
+## Regular Expressions
+### Metacharacters
+- the start of a line `^`
+  `^i think`
+- the end of a line `$`
+  `morning$`
+- list of characters will accept at a given point
+  `[Bb][Uu][Ss][Hh]`
+- character classes with []
+  `^[Ii] am`
+- a range of lesters
+  `^[0-9][a-zA-z]`
+- "^" used at the beginning of a character class ,NOT inthe indicated class
+  `[^?.]$`
+- "." is uesed to refer to any chararcter
+  `9.11`
+- "|" or, alternatives
+  `flood|fire`
+  `flood|earthquake|hurricane|coldfire`
+  `^[Gg]ood|[Bb]ad`
+  `^([Gg]ood|[Bb]ad)`
+- "?" indicated expression is optional
+  `[Gg]eogre( [Ww]\. )? [Bb]ush`
+- * means "any number, including none of the item" + means "at least one of the item"
+  `(.*)`
+  `[0-9]+(.*)[0-9]+`
+- {} interval quantifiers,specify the minimun and maximum number
+  `[Bb]ush( +[^ ]+ +){1,5} debate` 
+  1-5 words between bush and debate
+- and
+  - m,n at least m ,but not more than n matches
+  - m means exactly m matches
+  - m, means at least m matches
+- \1, \2 refer to the matched text
+  ` +([a-zA-Z]+) +\1 +`
+- the greediness of * can be turened off with the ?
+  `^s(.*?)s$`
 
+
+## Working with Dates
+```{r}
+d2 <- Sys.Date()
+d2
+```
+### formatting dates
+%d = day as number(0-31), %a = abbreviated weekday, %A = unabbreviated weekday, %m = month(00-12)
+,%b = abbreviated month, %B = unabbreviated month, %y = 2 digit year, %Y = four digit year
+
+```{r}
+formate(d2, "%a %b %d")
+```
+
+### Creating dates
+```{r}
+x <- c("1jan1960", "2jan1960", "31mar1960", "30jul1960")
+z  <- as.Date(x, "%d%b%Y")
+z
+z[1] - z[2]
+
+as.numeric(z[1]- z[2])
+
+```
+### lubridate
+
+```{r}
+library(lubridate)
+ymd("20140108")
+mdy("08/04/2013")
+dmy("03-04-2013")
+```
+Dealing with times
+```{r}
+ymd_hms("2011-08-03 10:15:03")
+ymd_hms("2011-08-03 10:15:03", tz = "Pacific/Auckland")
+?Sys.timezone
+```
+
+```{r}
+x <- dmy(c("1jan1960", "2jan1960", "31mar1960", "30jul1960"))
+wday(x[1])
+wday(x[1], label = TRUE)
+```
